@@ -4,7 +4,7 @@ import axios from "axios";
 // ==========================
 // Axios Instance (Localhost)
 // ==========================
-const API = axios.create({ baseURL: "http://localhost:3000" });
+const API = axios.create({ baseURL: import.meta.env.VITE_API_URL });
 API.interceptors.request.use((req) => {
   const token = localStorage.getItem("token");
   if (token) req.headers.Authorization = `Bearer ${token}`;
@@ -194,7 +194,7 @@ const TaskRow = ({ task, onEdit, onDelete }) => (
     <td className="px-4 py-3 text-slate-600 whitespace-pre-wrap">{task.description}</td>
     <td className="px-4 py-3">
       {task.file ? (
-        <a href={`http://localhost:3000${task.file}`} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline">View</a>
+        <a href={`${import.meta.env.VITE_API_URL}/uploads/${task.file}`} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline">View</a>
       ) : (
         <span className="text-slate-400">—</span>
       )}
