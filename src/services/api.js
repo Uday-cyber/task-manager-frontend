@@ -16,7 +16,7 @@ API.interceptors.request.use((req) => {
 });
 
 API.interceptors.response.use(
-    (req) => req,
+    res => res,
     async (error) => {
         const originalRequest = error.config;
 
@@ -25,19 +25,19 @@ API.interceptors.response.use(
 
       try {
         const { data } = await axios.post(
-          `${import.meta.env.VITE_API_URL}/users/refresh`,
+          `${API.defaults.baseURL}/users/refresh`,
           {},
           { withCredentials: true }
         );
 
         localStorage.setItem("token", data.token);
-        API.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
-
+        originalRequest.headers.Authorization = `Bearer ${data.token}`;
         return API(originalRequest);
       } catch (refreshError) {
-        console.error("Token refresh failed:", refreshError);
+        // console.error("Token refresh failed:", refreshError);
         localStorage.removeItem("token");
-        window.location.href = "/";
+        window.location.href = "/login";
+        return Promise.reject(refreshError);   
       }
     }
 
