@@ -246,7 +246,7 @@ const Modal = ({ open, title, children, onClose }) =>
 // ==========================
 // Task Form
 // ==========================
-const TaskForm = ({ initial = {}, onSubmit }) => {
+const TaskForm = ({ initial = {}, onSubmit, submitLabel = "Save" }) => {
   const [title, setTitle] = useState(initial.title || "");
   const [description, setDescription] = useState(initial.description || "");
   const [status, setStatus] = useState(initial.status || "pending");
@@ -265,7 +265,8 @@ const TaskForm = ({ initial = {}, onSubmit }) => {
 
   return (
     <form className="space-y-4" onSubmit={submit}>
-      <TextInput label="Title" value={title} onChange={setTitle} />
+      <TextInput label="Title" value={title} onChange={(val) => setTitle(val)} />
+
       <label className="block">
         <span>Description</span>
         <textarea
@@ -274,6 +275,7 @@ const TaskForm = ({ initial = {}, onSubmit }) => {
           className="w-full min-h-[100px] border rounded-xl px-3 py-2"
         />
       </label>
+
       <label className="block">
         <span>Status</span>
         <select
@@ -289,15 +291,16 @@ const TaskForm = ({ initial = {}, onSubmit }) => {
 
       <label className="block">
         <span>File</span>
-        <input type="file" onChange={(e) => setFile(e.target.files?.[0])} />
+        <input type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} />
       </label>
 
       <PrimaryButton type="submit" className="w-auto">
-        Save
+        {submitLabel}
       </PrimaryButton>
     </form>
   );
 };
+
 
 // ==========================
 // TASKS SCREEN (Updated with Search, Filter, Pagination)
